@@ -1,0 +1,22 @@
+version: '2'
+services:
+  rtgsoutgoing-app:
+    image: rtgsoutgoing
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,swagger
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://rtgsoutgoing-mysql:3306/rtgsoutgoing?useUnicode=true&characterEncoding=utf8&useSSL=false
+      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+      - SPRING_DATA_JEST_URI=http://rtgsoutgoing-elasticsearch:9200
+      - SPRING_ELASTICSEARCH_REST_URIS=http://rtgsoutgoing-elasticsearch:9200
+    ports:
+      - 8088:8088
+  rtgsoutgoing-mysql:
+    extends:
+      file: mysql.yml
+      service: rtgsoutgoing-mysql
+  rtgsoutgoing-elasticsearch:
+    extends:
+      file: elasticsearch.yml
+      service: rtgsoutgoing-elasticsearch
